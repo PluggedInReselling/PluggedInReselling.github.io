@@ -14,6 +14,18 @@ body {
   padding: 40px 20px;
 }
 
+/* Logo container */
+.logo-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.logo {
+  width: 64px;   /* Adjust size as needed */
+  height: auto;
+  display: inline-block;
+}
+
 /* Heading */
 h1 {
   font-size: 2.8rem;
