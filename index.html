@@ -8,27 +8,66 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
-  <div class="logo-container">
-    <img src="favicon.ico" alt="PluggedIn Supply Logo" class="logo" />
-  </div>
-  
   <h1>PluggedIn Supply</h1>
   <p>DM <strong>@yk.tinooo</strong> on Snapchat to purchase</p>
 
+  <!-- Logo on top -->
+  <img src="logo.png" alt="PluggedIn Logo" class="logo" />
+
   <div class="grid">
     <div class="item" onclick="alert('DM @yk.tinooo on Snapchat to purchase')">
-      <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQ4-3UlcTNyleudPnQNs499cIhnGZhcUYOl3ORU0JHTWPyugABlucx_7yd37bt93vv6AnO1rOFHIawxqQN01nt1_Mb0-bnERo8m4fWeAT0sLrTnG0gXqBFBqQ" alt="Sp5der Hoodie">
+      <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQ4-3UlcTNyleudPnQNs499cIhnGZhcUYOl3ORU0JHTWPyugABlucx_7yd37bt93vv6AnO1rOFHIawxqQN01nt1_Mb0-bnERo8m4fWeAT0sLrTnG0gXqBFBqQ" alt="Sp5der Hoodies">
       <p class="item-title">Sp5der Hoodie</p>
+      <p class="stock-status" data-id="sp5der">Checking stock...</p>
     </div>
     <div class="item" onclick="alert('DM @yk.tinooo on Snapchat to purchase')">
       <img src="https://images.stockx.com/images/Eric-Emanuel-x-BAPE-Miami-Basic-Short-Brown-Yellow.png?fit=fill&bg=FFFFFF&w=1200&h=857&q=60&dpr=1&trim=color&updated_at=1632951802" alt="Eric Emanuel Shorts">
       <p class="item-title">Eric Emanuel Shorts</p>
+      <p class="stock-status" data-id="ee_shorts">Checking stock...</p>
     </div>
     <div class="item" onclick="alert('DM @yk.tinooo on Snapchat to purchase')">
       <img src="https://image.goat.com/transform/v1/attachments/product_template_additional_pictures/images/093/670/082/original/1293960_01.jpg.jpeg?action=crop&width=750" alt="Denim Tears">
       <p class="item-title">Denim Tears</p>
+      <p class="stock-status" data-id="denim_tears">Checking stock...</p>
     </div>
-    <!-- Add more products here -->
+    <!-- Add more products with matching data-id if needed -->
   </div>
+
+  <script>
+    fetch('https://raw.githubusercontent.com/PluggedInReselling/stock/refs/heads/main/stock.txt?token=GHSAT0AAAAAADEY4NRH2JRXTD6VR4VIH4KC2BY7QCA')
+      .then(res => res.text())
+      .then(text => {
+        const lines = text.split('\n');
+        const stockMap = {};
+
+        lines.forEach(line => {
+          const [id, status] = line.trim().split(':');
+          if (id && status) stockMap[id] = status.toLowerCase();
+        });
+
+        document.querySelectorAll('.stock-status').forEach(el => {
+          const id = el.getAttribute('data-id');
+          const status = stockMap[id];
+
+          if (status === 'in') {
+            el.textContent = 'In Stock';
+            el.style.color = '#00ff6a';
+          } else if (status === 'out') {
+            el.textContent = 'Out of Stock';
+            el.style.color = '#ff4444';
+          } else {
+            el.textContent = 'Unknown';
+            el.style.color = '#aaaaaa';
+          }
+        });
+      })
+      .catch(err => {
+        document.querySelectorAll('.stock-status').forEach(el => {
+          el.textContent = 'Error';
+          el.style.color = '#ff4444';
+        });
+        console.error('Error fetching stock.txt:', err);
+      });
+  </script>
 </body>
 </html>
